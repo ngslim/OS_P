@@ -12,6 +12,8 @@ namespace P
     {
         public const String APP_DIRECTORY = @"C:\Users\Public\Parental Control\";
         public const String SCREENSHOT_DIRECTORY = @"C:\Users\Public\Parental Control\Screenshots\";
+        public const String CONFIG_FILE = "config.txt";
+        public const int TIME_BETWEEN_SAVE = 1; //10 minutes
     }
 
     public class Time
@@ -140,11 +142,36 @@ namespace P
 
     public class Phase
     {
-        public Time From = new Time();
-        public Time To = new Time();
-        public int Duration = 0;
-        public int InterruptTime = 0;
-        public int Sum = 0;
+        public string From { get; set; } = "00:00";
+        public string To { get; set; } = "00:00";
+        public int Duration { get; set; } = 0;
+        public int InterruptTime { get; set; } = 0;
+        public int Sum { get; set; } = 0;
+
+        public Phase() { }
+
+        public Phase(string from, string to, int duration, int interruptTime, int sum)
+        {
+            if (checkTimeFormat(from))
+            {
+                From = from;
+            }
+            else
+            {
+                From = "00:00";
+            }
+            if (checkTimeFormat(to))
+            {
+                To = to;
+            }
+            else
+            {
+                To = "00:00";
+            }
+            Duration = duration;
+            InterruptTime = interruptTime;
+            Sum = sum;
+        }
 
         public Phase(string phaseString)
         {
@@ -155,11 +182,11 @@ namespace P
                 string value = component.Substring(1);
                 if (index == 'F')
                 {
-                    From = new Time(value);
+                    From = value;
                 }
                 if (index == 'T')
                 {
-                    To = new Time(value);
+                    To = value;
                 }
                 if (index == 'D')
                 {
@@ -194,13 +221,58 @@ namespace P
             return phaseString;
         }
 
-        public bool hasTime(Time time)
+        public static bool checkTimeFormat(string timeString)
         {
-            if (time >= From && time <= To)
+            string[] components = timeString.Split(':');
+            if (components.Length != 2)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            try
+            {
+                int hour = Int32.Parse(components[0]);
+                if (hour < 0 || hour > 23)
+                {
+                    return false;
+                }
+            } catch (FormatException)
+            {
+                return false;
+            }
+
+            try
+            {
+                int minute = Int32.Parse(components[1]);
+                if (minute < 0 || minute > 59)
+                {
+                    return false;
+                }
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public class Phases
+    {
+        public List<Phase> phaseList { get; set; } = GetPhases();
+        public static List<Phase> GetPhases()
+        {
+            List<Phase> phaseList = new List<Phase>();
+
+            string[] lines = System.IO.File.ReadAllLines(@$"{Constant.APP_DIRECTORY}{Constant.CONFIG_FILE}");
+            foreach (string line in lines)
+            {
+                Phase newPhase = new Phase(line);
+                phaseList.Add(newPhase);
+            }
+
+            return phaseList;
         }
     }
 

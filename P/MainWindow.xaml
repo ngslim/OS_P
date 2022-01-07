@@ -7,20 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
     <Window.Resources>
-        <Style TargetType="Button" x:Key="TabButton">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="TextBlock.TextAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5,5,0,0" >
-                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="#FFF16985"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="SeparatorBrush" Value="White"/>
         </Style>
     </Window.Resources>
+    <Window.DataContext>
+        <local:Phases></local:Phases>
+    </Window.DataContext>
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0, 0" StartPoint="1, 1">
@@ -59,7 +55,40 @@
                             </Style>
                         </TabControl.Resources>
                         <TabItem Header="Lịch sử dụng" Margin="-2,0,0,0">
-                            <Label Content="Content goes here..." />
+                            <Grid>
+                                <DataGrid x:Name="phaseList" ItemsSource="{Binding phaseList, UpdateSourceTrigger=PropertyChanged}"
+                                          HorizontalGridLinesBrush="#10F04747"
+                                          VerticalGridLinesBrush="#10F04747"
+                                          Margin="0, 40, 0, 0"
+                                          HeadersVisibility="All"
+                                          CanUserAddRows="True"
+                                          CanUserReorderColumns="False"
+                                          CanUserSortColumns="False"
+                                          CanUserResizeRows="False"
+                                          CanUserResizeColumns="False"
+                                          FontSize="16"
+                                          ColumnWidth="200" Foreground="Black" BorderBrush="#FFF04747"
+                                          AutoGenerateColumns="False"
+                                          AreRowDetailsFrozen="True"
+                                          >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Thời gian bắt đầu"
+                                                            Binding="{Binding From, StringFormat='HH:mm', UpdateSourceTrigger=PropertyChanged}"/>
+                                        <DataGridTextColumn Header="Thời gian kết thúc"
+                                                            Binding="{Binding To, StringFormat='HH:mm', UpdateSourceTrigger=PropertyChanged}"/>
+                                        <DataGridTextColumn Header="Số phút dùng mỗi quãng"
+                                                            Binding="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <DataGridTextColumn Header="Số phút nghỉ mỗi quãng"
+                                                            Binding="{Binding InterruptTime, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <DataGridTextColumn Header="Tổng thời gian"
+                                                            Binding="{Binding Sum, UpdateSourceTrigger=PropertyChanged}"/>
+                                        
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <Button Click="btnSave_Click" Content="Lưu lại" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="60" Margin="0,5,0,0" BorderThickness="0" Foreground="White" Background="#FFF16985"/>
+                                <Button Click="btnRefresh_Click" Content="Tải lại" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="60" Margin="65,5,0,0" BorderThickness="0" Background="#FFF16985" Foreground="White"/>
+                            </Grid>
+
                         </TabItem>
                         <TabItem Header="Ảnh chụp màn hình">
                             <ListBox x:Name="imageList" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
