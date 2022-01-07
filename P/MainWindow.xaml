@@ -94,7 +94,7 @@
                             <ListBox x:Name="imageList" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <UniformGrid Rows="3" Columns="3" Width="Auto" Height="Auto"/>
+                                        <UniformGrid Columns="3" Width="Auto" Height="Auto"/>
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemTemplate>
