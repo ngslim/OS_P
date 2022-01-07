@@ -70,7 +70,10 @@
                                 </ListBox.ItemsPanel>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding}" Width="Auto"></Image>
+                                        <Grid>
+                                            <Image MouseDown="image_Click" Source="{Binding}" Width="Auto" Cursor="Hand">
+                                            </Image>
+                                        </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
@@ -81,3 +84,4 @@
         </Grid>
     </Grid>
 </Window>
+

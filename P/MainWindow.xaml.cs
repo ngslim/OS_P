@@ -14,12 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace P
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -29,8 +27,8 @@ namespace P
         }
 
         private void refreshImageList()
-
         {
+            imageList.Items.Clear();
             String searchFolder = Constant.SCREENSHOT_DIRECTORY;
             var filters = new String[] { "jpg", "jpeg", "png", "gif", "tiff", "bmp", "svg" };
             var files = GetFilesFrom(searchFolder, filters, false);
@@ -58,6 +56,17 @@ namespace P
                 filesFound.AddRange(Directory.GetFiles(searchFolder, String.Format("*.{0}", filter), searchOption));
             }
             return filesFound.ToArray();
+        }
+
+        private void image_Click(object sender, MouseEventArgs e)
+        {
+            Image? image = sender as Image;
+            Process openImage = new Process();
+            openImage.StartInfo = new ProcessStartInfo(@image.Source.ToString())
+            {
+                UseShellExecute = true
+            };
+            openImage.Start();
         }
     }
 }
