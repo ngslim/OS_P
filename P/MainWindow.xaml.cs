@@ -21,8 +21,6 @@ namespace P
 {
     public partial class MainWindow : Window
     {   
-        Time timeToNextSave = new Time();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -88,7 +86,7 @@ namespace P
             System.TimeSpan timeSpan = now - modification;
             if(timeSpan.Minutes < Constant.TIME_BETWEEN_SAVE)
             {
-                MessageBox.Show($"Bạn vừa chỉnh sửa gần đây, thử lại vào {timeToNextSave.ToString()}", "Thông báo");
+                MessageBox.Show($"Bạn vừa chỉnh sửa gần đây, thử lại sau {Constant.TIME_BETWEEN_SAVE} phút", "Thông báo");
                 return;
             }
             
@@ -140,7 +138,6 @@ namespace P
             File.WriteAllText(file, lines);
             phaseList.ItemsSource = null;
             phaseList.ItemsSource = Phases.GetPhases();
-            timeToNextSave = Time.Now() + Time.MinuteToTime(Constant.TIME_BETWEEN_SAVE);
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
