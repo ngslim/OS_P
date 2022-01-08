@@ -265,14 +265,21 @@ namespace P
         {
             List<Phase> phaseList = new List<Phase>();
 
-            string[] lines = System.IO.File.ReadAllLines(@$"{Constant.APP_DIRECTORY}{Constant.CONFIG_FILE}");
-            foreach (string line in lines)
+            try
             {
-                Phase newPhase = new Phase(line);
-                phaseList.Add(newPhase);
-            }
+                string[] lines = System.IO.File.ReadAllLines(@$"{Constant.APP_DIRECTORY}{Constant.CONFIG_FILE}");
+                foreach (string line in lines)
+                {
+                    Phase newPhase = new Phase(line);
+                    phaseList.Add(newPhase);
+                }
 
-            return phaseList;
+                return phaseList;
+            }
+            catch
+            {
+                return GetPhases();
+            }
         }
     }
 
